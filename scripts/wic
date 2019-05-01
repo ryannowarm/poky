@@ -254,6 +254,9 @@ def wic_ls_subcommand(args, usage_str):
     Command-line handling for list content of images.
     The real work is done by engine.wic_ls()
     """
+    if args.debug:
+        logger.setLevel(logging.DEBUG)
+
     engine.wic_ls(args, args.native_sysroot)
 
 def wic_cp_subcommand(args, usage_str):
@@ -403,6 +406,8 @@ def wic_init_parser_ls(subparser):
                         help="image spec: <image>[:<vfat partition>[<path>]]")
     subparser.add_argument("-n", "--native-sysroot",
                         help="path to the native sysroot containing the tools")
+    subparser.add_argument("-D", "--debug", dest="debug", action="store_true",
+                      default=False, help="output debug information")
 
 def imgpathtype(arg):
     img = imgtype(arg)
