@@ -269,6 +269,16 @@ def wic_cp_subcommand(args, usage_str):
 
     engine.wic_cp(args, args.native_sysroot)
 
+def wic_ex_subcommand(args, usage_str):
+    """
+    Command-line handling for extracting files from images.
+    The real work is done by engine.wic_ex()
+    """
+    if args.debug:
+        logger.setLevel(logging.DEBUG)
+
+    engine.wic_ex(args, args.native_sysroot)
+
 def wic_rm_subcommand(args, usage_str):
     """
     Command-line handling for removing files/dirs from images.
@@ -428,6 +438,16 @@ def wic_init_parser_cp(subparser):
     subparser.add_argument("-D", "--debug", dest="debug", action="store_true",
                       default=False, help="output debug information")
 
+def wic_init_parser_ex(subparser):
+    subparser.add_argument("src", type=imgpathtype,
+                        help="image spec: <image>:<vfat partition>[<path>]")
+    subparser.add_argument("dest",
+                        help="dest spec")
+    subparser.add_argument("-n", "--native-sysroot",
+                        help="path to the native sysroot containing the tools")
+    subparser.add_argument("-D", "--debug", dest="debug", action="store_true",
+                      default=False, help="output debug information")
+
 def wic_init_parser_rm(subparser):
     subparser.add_argument("path", type=imgpathtype,
                         help="path: <image>:<vfat partition><path>")
@@ -499,6 +519,10 @@ subcommands = {
                   hlp.wic_cp_usage,
                   hlp.wic_cp_help,
                   wic_init_parser_cp],
+    "ex":        [wic_ex_subcommand,
+                  hlp.wic_ex_usage,
+                  hlp.wic_ex_help,
+                  wic_init_parser_ex],
     "rm":        [wic_rm_subcommand,
                   hlp.wic_rm_usage,
                   hlp.wic_rm_help,

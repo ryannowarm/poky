@@ -416,6 +416,39 @@ DESCRIPTION
     containing the tools(parted and mtools) to use.
 """
 
+wic_ex_usage = """
+
+ Extract files from the vfat or ext* partition
+
+ usage: wic ex <image>:<partition>[<path>] <dest> [--native-sysroot <path>]
+
+ This command extracts files from the vfat or ext* partitions of partitioned  image.
+
+ See 'wic help ex' for more detailed instructions.
+
+"""
+
+wic_ex_help = """
+
+NAME
+    wic ex - extract files from the vfat or ext* partitions
+
+SYNOPSIS
+    wic ex <image>:<partition><path> <dest>
+    wic ex <image>:<partition><path> <dest> --native-sysroot <path>
+
+DESCRIPTION
+    This command extracts files from the vfat or ext* partition of the
+    partitioned image.
+
+    The first form of the command extracts file from the specified directory
+    on the partition:
+       $ wic ex tmp/deploy/images/qemux86-64/core-image-minimal-qemux86-64.wic:1/efi/ .
+
+    The -n option is used to specify the path to the native sysroot
+    containing the tools(parted and mtools) to use.
+"""
+
 wic_rm_usage = """
 
  Remove files or directories from the vfat or ext* partitions

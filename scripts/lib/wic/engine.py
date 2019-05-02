@@ -348,6 +348,20 @@ class Disk:
         exec_cmd(cmd, as_shell=True)
         self._put_part_image(pnum)
 
+    def extract(self, pnum, path, dest):
+        """Extract a file from a partition image."""
+        if self.partitions[pnum].fstype.startswith('ext'):
+            if os.path.isdir(dest):
+                dest = dest + os.path.basename(path)
+            cmd = "printf 'dump {} {}' | {} -w {}".\
+                      format(path, dest,
+                             self.debugfs, self._get_part_image(pnum))
+        else: # fat
+            cmd = "{} -i {} -snop ::{} {}".format(self.mcopy,
+                                                  self._get_part_image(pnum),
+                                                  path, dest)
+        exec_cmd(cmd, as_shell=True)
+
     def remove(self, pnum, path):
         """Remove files/dirs from the partition."""
         partimg = self._get_part_image(pnum)
@@ -541,6 +555,13 @@ def wic_cp(args, native_sysroot):
     """
     disk = Disk(args.dest.image, native_sysroot)
     disk.copy(args.src, args.dest.part, args.dest.path)
+
+def wic_ex(args, native_sysroot):
+    """
+    Extract file from the partition of partitioned image
+    """
+    disk = Disk(args.src.image, native_sysroot)
+    disk.extract(args.src.part, args.src.path, args.dest)
 
 def wic_rm(args, native_sysroot):
     """
